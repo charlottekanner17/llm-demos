@@ -1,45 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Election Results</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <h1>Maryland Election Results</h1>
     
-    <h2>Statewide Totals</h2>
-    <table id="statewideTable">
-      <thead>
-        <tr>
-          <th>Candidate</th>
-          <th>Votes</th>
-          <th>Percentage</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div id="statewide" class="card"></div>
 
-    <h2>County Results</h2>
-    <label for="countySelect">Select a County:</label>
-    <select id="countySelect">
-      <option value="">-- Select --</option>
+    <label for="county-select">Select a County:</label>
+    <select id="county-select">
+      <option disabled selected value="">--Choose a County--</option>
     </select>
 
-    <table id="countyTable">
-      <thead>
-        <tr>
-          <th>Candidate</th>
-          <th>Votes</th>
-          <th>Percentage</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div id="county-results" class="card"></div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
-
