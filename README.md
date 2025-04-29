@@ -10,7 +10,7 @@ Start with [this data](https://raw.githubusercontent.com/dwillis/jour405/refs/he
 
 3. Try improving the result, and updating the files based on the results. Did that help?
 
-   I honestly don't know how to fix the total number of voters for Harris. I would assume that data would be on the script.js sheet but I only see the numbers for each county. 
+I had chat fix the harris number which it was able to do but then i lost the gride lines for the information but even without the lines the data is still easy to read. 
 
 5. Think of a journalism circumstance where you might use this sort of technique that doesn't involve elections. Describe how you would do it.
 
