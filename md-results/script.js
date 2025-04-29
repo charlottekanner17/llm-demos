@@ -1,4 +1,4 @@
-const data = `jurisdiction,harris,trump,oliver,stein,kennedy,others,total
+const csvData = `jurisdiction,harris,trump,oliver,stein,kennedy,others,total
 Allegany,9231,22141,130,136,363,136,32137
 Anne Arundel,171945,128892,2141,2429,3375,2790,311572
 Baltimore City,195109,27984,892,3222,1875,1672,230754
@@ -24,68 +24,46 @@ Washington,27260,44054,363,513,811,331,73332
 Wicomico,21513,24065,205,371,544,214,46912
 Worcester,12431,19632,139,184,342,153,32881`;
 
-const candidates = ["harris", "trump", "oliver", "stein", "kennedy", "others"];
-
-const rows = data.trim().split("\n").map(row => row.split(","));
+const rows = csvData.split("\n").map(row => row.split(","));
 const headers = rows[0];
 const counties = rows.slice(1).map(row => {
   const obj = {};
   headers.forEach((header, i) => {
-    obj[header] = i < 2 ? row[i] : parseInt(row[i]);
+    obj[header] = header === "jurisdiction" ? row[i] : parseInt(row[i]);
   });
   return obj;
 });
 
-function calculateStatewideTotals() {
-  const totals = { total: 0 };
-  candidates.forEach(name => totals[name] = 0);
-  counties.forEach(county => {
-    totals.total += county.total;
-    candidates.forEach(name => {
-      totals[name] += county[name];
-    });
-  });
-  return totals;
-}
+const candidates = headers.slice(1, -1); // exclude 'jurisdiction' and 'total'
 
-function renderTable(dataObj, total, tableBodyId) {
-  const tbody = document.querySelector(`#${tableBodyId} tbody`);
-  tbody.innerHTML = "";
-  candidates.forEach(name => {
-    const row = document.createElement("tr");
-    const nameCell = document.createElement("td");
-    nameCell.textContent = name.charAt(0).toUpperCase() + name.slice(1);
-    const votesCell = document.createElement("td");
-    votesCell.textContent = dataObj[name].toLocaleString();
-    const percentCell = document.createElement("td");
-    percentCell.textContent = ((dataObj[name] / total) * 100).toFixed(2) + "%";
-    row.appendChild(nameCell);
-    row.appendChild(votesCell);
-    row.appendChild(percentCell);
-    tbody.appendChild(row);
-  });
-}
+// Calculate statewide totals
+const statewideTotals = {};
+candidates.forEach(candidate => {
+  statewideTotals[candidate] = counties.reduce((sum, county) => sum + county[candidate], 0);
+});
+const totalVotes = counties.reduce((sum, county) => sum + county.total, 0);
 
-function populateDropdown() {
-  const select = document.getElementById("countySelect");
-  counties.forEach(county => {
-    const option = document.createElement("option");
-    option.value = county.jurisdiction;
-    option.textContent = county.jurisdiction;
-    select.appendChild(option);
-  });
+// Display statewide totals
+const stateDiv = document.getElementById("statewide");
+stateDiv.innerHTML = `<h2>Statewide Totals</h2><ul>
+  ${candidates.map(c => `<li>${c}: ${statewideTotals[c]} (${((statewideTotals[c] / totalVotes) * 100).toFixed(2)}%)</li>`).join("")}
+</ul>`;
 
-  select.addEventListener("change", () => {
-    const selectedCounty = counties.find(c => c.jurisdiction === select.value);
-    if (selectedCounty) {
-      renderTable(selectedCounty, selectedCounty.total, "countyTable");
-    }
-  });
-}
+// Populate dropdown
+const select = document.getElementById("county-select");
+counties.forEach(county => {
+  const option = document.createElement("option");
+  option.value = county.jurisdiction;
+  option.textContent = county.jurisdiction;
+  select.appendChild(option);
+});
 
-document.addEventListener("DOMContentLoaded", () => {
-  const statewide = calculateStatewideTotals();
-  renderTable(statewide, statewide.total, "statewideTable");
-  populateDropdown();
+// Handle county selection
+select.addEventListener("change", () => {
+  const selected = counties.find(c => c.jurisdiction === select.value);
+  const resultDiv = document.getElementById("county-results");
+  resultDiv.innerHTML = `<h2>${selected.jurisdiction} County</h2><ul>
+    ${candidates.map(c => `<li>${c}: ${selected[c]} (${((selected[c] / selected.total) * 100).toFixed(2)}%)</li>`).join("")}
+  </ul>`;
 });
 
