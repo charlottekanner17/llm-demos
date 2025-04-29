@@ -16,3 +16,4 @@ I had chat fix the harris number which it was able to do but then i lost the gri
 
 This could be used for any set of data that deals with numbers and percentages like trying to track the total number of covid cases in each state by county or town. Essentially, it would use the same process as we have here for elections but for covid cases instead. I like the idea of having a drop down button and having the website be interactive. This allows the website to look clean but still have all of the important information needed.
 
+https://chatgpt.com/share/68111c81-38b4-8009-a395-47ca6ab96332 
